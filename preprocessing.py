@@ -96,7 +96,6 @@ You are an experienced computer science teacher. You will be given a Java progra
 
 # Use gpt-4o to determine if the generated code is correct
 def get_solution_correctness(prompt, model='gpt-4o', temperature=0):
-    openai.api_key = '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'
     try:
         user_prompt = "Problem:\n" + prompt[0] + "\n\nCode\n" + prompt[1]
         
