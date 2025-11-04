@@ -12,7 +12,6 @@ import math
 
 # Generate 1 sample solution for each question
 def get_sample_solution_gpt(prompt, model='gpt-4o', temperature=0):
-    openai.api_key = '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'
     try:
         user_prompt = "Problem: " + prompt[0] + " Method name and parameters: " + prompt[1]
         
