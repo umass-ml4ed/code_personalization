@@ -465,7 +465,6 @@ def main():
     parser.add_argument("--max_new_tokens", type=int, default=200, help="Maximum completion length for generation.")
     parser.add_argument("--log_wandb", action='store_true', help="Whether to log training with Weights & Biases.")
     parser.add_argument("--beta", type=float, default=0.0, help="Beta parameter for GRPO.")
-    parser.add_argument("--wandb_key", type=str, default='ff70920d9852a9d2e78bbd1cd2e100154d2c9c7d', help="API key for Weights & Biases.")
     parser.add_argument("--split_by", type=str, default='student', help="Split data by 'student' or 'problem'.")
     parser.add_argument("--reward_weight", type=float, default=1, help="Reward function weights for GRPO.")
     parser.add_argument("--with_knowledge", action='store_true', help="Whether to include knowledge component information in prompts.")
