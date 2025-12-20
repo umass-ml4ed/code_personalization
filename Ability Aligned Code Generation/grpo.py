@@ -423,28 +423,27 @@ def eval_grpo(args, device, grpo_time):
     #     problems = generated_output['problems']
     #     generated_output = generated_output['generated_codes']
     
-    # error_df = pd.read_pickle('data/data_inc_error_label_full.pkl')
+    error_df = pd.read_pickle('data/data_inc_error_label_full.pkl')
 
-    # test_set.drop(columns=['error_labels'], inplace=True)
-    # eval_res = evaluate_error_coverage_individual(test_set, error_df, generated_output, args)
+    test_set.drop(columns=['error_labels'], inplace=True)
+    eval_res = evaluate_error_coverage_individual(test_set, error_df, generated_output, args)
 
-    # with open(os.path.join(args.model_save_dir, grpo_time, 'llm_judge_res.pkl'), 'wb') as f:
-    #     pickle.dump(eval_res, f)
+    with open(os.path.join(args.model_save_dir, grpo_time, 'llm_judge_res.pkl'), 'wb') as f:
+        pickle.dump(eval_res, f)
 
-    # print('Finished LLM as judge evaluation for individual level error coverage')
+    print('Finished LLM as judge evaluation for individual level error coverage')
 
-    # print('Start LLM as judge overall evaluation')
+    print('Start LLM as judge overall evaluation')
 
-    # with open('data/problem_error_dict_0_30.pkl', 'rb') as f:
-    #     problem_error_dict = pickle.load(f)
+    with open('data/problem_error_dict_30.pkl', 'rb') as f:
+        problem_error_dict = pickle.load(f)
 
-    # output = evaluate_error_coverage_overall(test_set, problem_error_dict, generated_output, args)
+    output = evaluate_error_coverage_overall(test_set, problem_error_dict, generated_output, args)
     
-    # with open(os.path.join(args.model_save_dir, grpo_time, 'llm_judge_overall_res.pkl'), 'wb') as f:
-    #     pickle.dump(output, f)
+    with open(os.path.join(args.model_save_dir, grpo_time, 'llm_judge_overall_res.pkl'), 'wb') as f:
+        pickle.dump(output, f)
     
-    # set_trace()
-    # print('Finished LLM as judge overall evaluation')
+    print('Finished LLM as judge overall evaluation')
 
 
 
