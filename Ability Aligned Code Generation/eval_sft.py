@@ -71,7 +71,7 @@ def evaluate(ground_truth_code, preds, problem, configs, now, lang='java'):
         for gt_code, gen_codes in zip(ground_truth_code, pres_segmented):
             codebleu_scores = []
             for gen_code in gen_codes:
-                codebleu_score, _ = compute_code_bleu_modified([gt_code], [gen_code], lang)
+                codebleu_score, _ = compute_code_bleu([gt_code], [gen_code], lang)
                 codebleu_scores.append(codebleu_score)
             all_codebleu_scores.append(max(codebleu_scores))
         
