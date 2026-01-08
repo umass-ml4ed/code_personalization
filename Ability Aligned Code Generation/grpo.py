@@ -19,41 +19,6 @@ def read_data(args, test_size=0.2, random_state=0):
     df = pd.read_pickle(args.data_path)
     
     df.sort_values(by=['SubjectID', 'ServerTimestamp'], inplace=True)
-    
-    ## Data cleaning
-    # df.drop(columns=['CodeStateID', 'Code-ast', 'code-astnn', 'code-embedding', 'embedding', 'astnn', 'prompt-embedding', 'input'], inplace=True)
-    # df["Code"] = df["Code"].str.replace(r"/\*.*?\*/", "", regex=True).str.replace(r"/\*[\s\S]*?\*/", "", regex=True).str.replace(r"//.*", "", regex=True).str.strip()
-
-    ## Merging original df with error labels
-    # error_df = pd.read_pickle('data/data_inc_error_label_full.pkl')
-    # df = df.merge(error_df[['SubjectID', 'ServerTimestamp', 'error_labels']], on=['SubjectID', 'ServerTimestamp'], how='left')
-    
-    ## map the problem level error lists to each student attempt
-    ## map each individual error list to the mapped cluster error name for all submissions
-    # problem_error_dict = pd.read_pickle('data/problem_error_dict_30.pkl')
-
-    # df['problem_error_labels'] = df['prompt'].map(problem_error_dict)
-
-    # map_dict = pd.read_pickle('data/error_name_mapping_30.pkl')
-
-    # def clean_error_labels(row):
-    #     problem = row['prompt']
-    #     error_list = row['error_labels']
-    #     if len(error_list) == 0:
-    #         return []
-        
-    #     error_ls_i = list(set([item[-1] for item in error_list]))
-    #     clean_errors = [re.sub(r'(?<!^)(?<!-)(?=[A-Z])', ' ', s) for s in error_ls_i]
-    #     clean_errors = [re.sub(r"\s+", " ", s) for s in clean_errors]
-    #     clean_errors = [s.lower().strip() for s in clean_errors]
-    #     clean_errors = [s[:-1] if s.endswith('s') and not s.endswith('ss') else s for s in clean_errors]
-
-    #     mapping = map_dict[problem]
-    #     mapped_errors = [mapping[s] for s in clean_errors]
-
-    #     return mapped_errors
-
-    # df['error_labels'] = df.apply(clean_error_labels, axis=1)
 
     if not args.with_knowledge:
         problem_to_codes = df.groupby("prompt")["Code"].apply(list).to_dict()
