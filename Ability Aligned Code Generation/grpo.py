@@ -45,35 +45,6 @@ def read_data(args, test_size=0.2, random_state=0):
     return train_set, valid_set, test_set
 
 
-def load_student_dataset(df, tokenizer, prompt_column = "prompt"):
-    ds = Dataset.from_pandas(df, preserve_index=False)
-
-    def to_prompt(ex):
-        system_content = "You are an LLM that simulates a student writing Java code. For the given problem, respond the way such a student realistically would: sometimes producing correct code, sometimes making mistakes that students are likely to make. Output code only without any explanations or comments. Do not wrap the code in markdown fences (no ```)."
-        user_prompt = f"Problem: {ex[prompt_column]} Student written code:"
-
-        messages = [
-            {"role": "system", "content": system_content},
-            {"role": "user", "content": user_prompt},
-        ]
-
-        prompt = tokenizer.apply_chat_template(
-            messages,
-            add_generation_prompt=True,
-            tokenize=False,
-        )
-
-        out = {"prompt": prompt,
-               "code_candidates": ex["code_candidates"]
-        }
-        
-        return out
-
-    ds = ds.map(to_prompt, remove_columns=ds.column_names)
-
-    return ds
-
-
 def load_student_ability_dataset(df, tokenizer, prompt_column = "prompt"):
     ds = Dataset.from_pandas(df, preserve_index=False)
 
@@ -163,23 +134,11 @@ def diversity_reward(completions, **kwargs):
 def make_error_reward_fn(model, tokenizer):
     @torch.inference_mode()
     def contains_error(outputs, problems, error_ls, problem_errors_ls):
-#         system_content = """You are an experienced code reviewer. Given a programming problem along with a code and a list of errors, your task is to:
-# 1. Examine the code and all the errors in the list.
-# 2. Reason which errors from the list are included in the code and return all that apply based on your reasoning.
-# 3. Return an empty list if none of the errors are present in the code or the code is correct.
+        system_content = """You are an experienced code reviewer. Given a programming problem along with a code and a list of errors, your task is to:
+1. Examine the code and all the errors in the list.
+2. Reason which errors from the list are included in the code and return all that apply based on your reasoning.
+3. Return an empty list if none of the errors are present in the code or the code is correct.
 
-# Output rules (CRITICAL):
-# - Output MUST be valid JSON.
-# - Use DOUBLE QUOTES (") for all strings and keys.
-# - Do NOT use single quotes (').
-# - Do NOT include explanations, reasoning, comments, or extra text.
-# - Do NOT wrap the JSON in markdown or code blocks.        
-
-# The output MUST match this exact schema:
-# {"errors": ["error 1", "error 2", ...]}
-# """
-
-        system_content = """You are an experienced code reviewer. You will be provided with a programming problem along with a student code and a list of errors. Your task is to reason on the code and return all errors from the list that are included in the student code or an empty list if none of the errors are present in the code or the code is correct in JSON format.
 Output rules (CRITICAL):
 - Output MUST be valid JSON.
 - Use DOUBLE QUOTES (") for all strings and keys.
@@ -359,14 +318,6 @@ def grpo(args, device, sft_time, grpo_time):
         error_reward = make_error_reward_fn(judge_model, judge_tokenizer)
         reward_functions = [match_ability_reward, diversity_reward, error_reward]
         reward_weights = [1.0, 1.0, 1.0]
-        
-
-    else:
-        train_ds = load_student_dataset(train_set, tokenizer, args.prompt_column)
-        valid_ds = load_student_dataset(valid_set, tokenizer, args.prompt_column)
-        test_ds = load_student_dataset(test_set, tokenizer, args.prompt_column)
-        reward_functions = [match_reward, diversity_reward]
-        reward_weights = [args.reward_weight, 1 - args.reward_weight]
 
 
     # GRPO training config
