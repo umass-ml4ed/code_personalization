@@ -22,7 +22,7 @@ from tqdm import tqdm
 
 # Label student code error
 def error_label(problem, language, code, model='gpt-4o', temperature=0):
-    openai.api_key = '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'
+    openai.api_key = ''
 
     try:
         # Using code in the original pipeline
