@@ -163,7 +163,7 @@ def error_summarize(error_dict, model='gpt-4o', temperature=0, n=1):
     return kc_summarized, map_dict
 
 def error_cluster_summarize(error_list, model='gpt-4o-mini', temperature=0, n=1):
-    openai.api_key = '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'
+    openai.api_key = ''
 
     try:
         user_prompt = f"The error list is:\n{error_list}" + "\n\nNow follow the instructions in system message. First, examine the list carefully to understand their shared meaning. Second, explicitly reason about the error. Third, based on the reasoning, either select one error that best represents the group if they share the meaning or summarize your analysis into one clear and concise phrase that accurately captures the essence of this cluster."
@@ -241,7 +241,7 @@ def error_cluster_alg(error_list, encoder_name):
 
 
 def LLM_as_Judge(problem, code, error_ls, model='o4-mini'):
-    openai.api_key = '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'
+    openai.api_key = ''
 
     try:
         user_prompt = f"Problem\n{problem}\n\nStudent code:\n{code}\n\nThe error list is:\n{error_ls}" + "\n\nNow follow the instructions in system message, select all errors from the list that are present in the student code."
